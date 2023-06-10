@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Scraper Page</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+
+<body>
+  <div class='flex flex-col'>
+    <div class="flex flex-row justify-between">
+      <a href="/client/scrapes">
+        &lt; Go back</a>
+    </div>
+    <table id="scrapes-table"
+      class="my-5 border-collapse w-full border border-slate-400 dark:border-slate-500 bg-white dark:bg-slate-800 text-sm shadow-sm text-white">
+      <thead>
+        <tr>
+          <th class="border border-slate-600 ">Name</th>
+          <th class="border border-slate-600">Total Links</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Data will be dynamically populated here -->
+      </tbody>
+    </table>
+
+    <div id="pagination" class="flex flex-row my-5">
+      <!-- Pagination buttons will be dynamically populated here -->
+    </div>
+
+  </div>
+
+  <script>
+
+    function loadScrapes() {
+      let token = localStorage.getItem('token');
+      fetch(`/api/scrapes/{{ id }}/content`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token,
+        },
+      })
+        .then((response) => {
+          if (response.ok) {
+            return response.json()
+          } else {
+            switch (response.status) {
+              case 401:
+                localStorage.removeItem('token');
+                window.location = '/client';
+                break;
+            }
+          }
+        })
+        .then((data) => {
+          let tbody = document
+            .getElementById('scrapes-table')
+            .getElementsByTagName('tbody')[0];
+          tbody.innerHTML = ''; // Clear the table
+
+          // Populate the table
+          if (data && data.length) {
+            for (let scrape of data) {
+              let row = tbody.insertRow();
+              let nameCell = row.insertCell(0);
+              let totalLinksCell = row.insertCell(1);
+              nameCell.textContent = scrape.name;
+              totalLinksCell.textContent = scrape.url;
+
+              nameCell.classList = ['border border-slate-700'];
+              totalLinksCell.classList = ['border border-slate-700'];
+            }
+
+          }
+        })
+        .catch((error) => {
+          console.log(error.status, JSON.stringify(error));
+          console.error('Error:', error);
+        });
+    }
+
+    // Initial load
+    loadScrapes();
+  </script>
+</body>
+
+</html>

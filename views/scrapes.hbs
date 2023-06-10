@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Scraper Page</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+
+<body>
+  <div class='flex flex-col'>
+    <h2>Web Scraper</h2>
+
+    <div class="flex flex-row">
+      <form id="scrape-form">
+        <div class="flex flex-row">
+          <div class="form">
+            <div>
+              <label for="url">URL:</label>
+              <input type="text" id="url" name="url" required />
+            </div>
+            <div>
+              <label for="title">Title:</label>
+              <input type="text" id="title" name="title" required />
+            </div>
+          </div>
+          <div class="submit flex items-center justify-content">
+            <button class="rounded-full p-2" type="submit">Scrape</button>
+          </div>
+        </div>
+      </form>
+
+    </div>
+
+    <table id="scrapes-table"
+      class="my-5 border-collapse w-full border border-slate-400 dark:border-slate-500 bg-white dark:bg-slate-800 text-sm shadow-sm text-white">
+      <thead>
+        <tr>
+          <th class="border border-slate-600 ">Name</th>
+          <th class="border border-slate-600">Total Links</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Data will be dynamically populated here -->
+      </tbody>
+    </table>
+
+    <div id="pagination" class="flex flex-row my-5">
+      <!-- Pagination buttons will be dynamically populated here -->
+    </div>
+
+  </div>
+
+  <script>
+    const MAX_PAGES = 10;
+    let currentPage = 0;
+
+    document
+      .getElementById('scrape-form')
+      .addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        let url = document.getElementById('url').value;
+        let title = document.getElementById('title').value;
+        let token = localStorage.getItem('token');
+
+        fetch('/api/scrapes', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+          },
+          body: JSON.stringify({
+            url: url,
+            title: title,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            loadScrapes(currentPage);
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
+      });
+
+    function loadScrapes(page) {
+      let token = localStorage.getItem('token');
+      fetch(`/api/scrapes?page=${page}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token,
+        },
+      })
+        .then((response) => {
+          if (response.ok) {
+            return response.json()
+          } else {
+            switch (response.status) {
+              case 401:
+                localStorage.removeItem('token');
+                window.location = '/client';
+                break;
+            }
+          }
+        })
+        .then((data) => {
+          let tbody = document
+            .getElementById('scrapes-table')
+            .getElementsByTagName('tbody')[0];
+          tbody.innerHTML = ''; // Clear the table
+
+          // Populate the table
+          if (data && data.length) {
+            for (let scrape of data) {
+              let row = tbody.insertRow();
+              let nameCell = row.insertCell(0);
+              let totalLinksCell = row.insertCell(1);
+              nameCell.innerHTML = `<a href="/client/scrapes/${scrape.id}">${scrape.title}</a>`;
+              if (scrape.status === "DONE") {
+                totalLinksCell.textContent = scrape.linksFound;
+              } else {
+                totalLinksCell.textContent = scrape.status;
+              }
+              nameCell.classList = ['border border-slate-700'];
+              totalLinksCell.classList = ['border border-slate-700'];
+            }
+
+            // Populate pagination buttons
+            let pagination = document.getElementById('pagination');
+            pagination.innerHTML = ''; // Clear existing buttons
+
+            for (let i = 0; i < MAX_PAGES; i++) {
+              let button = document.createElement('button');
+              button.textContent = i + 1;
+              button.classList.add('pagination-button');
+              if (i === page) button.classList.add('active');
+              button.addEventListener('click', function () {
+                loadScrapes(i);
+                currentPage = i;
+              });
+              pagination.appendChild(button);
+            }
+          }
+        })
+        .catch((error) => {
+          console.log(error.status, JSON.stringify(error));
+          console.error('Error:', error);
+        });
+    }
+
+    // Initial load
+    loadScrapes(currentPage);
+  </script>
+</body>
+
+</html>

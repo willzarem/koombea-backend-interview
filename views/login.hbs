@@ -1,0 +1,49 @@
+<html>
+
+<head>
+  <title>Login Page</title>
+  <script src='https://cdn.tailwindcss.com'></script>
+  <link rel='stylesheet' href='../styles.css' />
+</head>
+
+<body>
+  <div class='flex flex-col'>
+    <h2>Login Page</h2>
+
+    <form id='login-form'>
+      <div>
+        <label for='username'>Username:</label>
+        <input type='text' id='username' name='username' required />
+      </div>
+      <div>
+        <label for='password'>Password:</label>
+        <input type='password' id='password' name='password' required />
+      </div>
+      <button type='submit'>Login</button>
+    </form>
+
+  </div>
+
+  <script>
+    document.getElementById('login-form').addEventListener('submit',
+      function (e) {
+        e.preventDefault(); let username =
+          document.getElementById('username').value; let password =
+            document.getElementById('password').value; fetch('/auth/signin', {
+              method:
+                'POST', headers: { 'Content-Type': 'application/json', }, body:
+                JSON.stringify({ username: username, password: password, }),
+            })
+              .then((response) => response.json()).then((data) => {
+                if
+                  (data.accessToken) {
+                  localStorage.setItem('token', data.accessToken);
+                  window.location = '/client/scrapes';
+                } else { alert('Login failed'); }
+              })
+              .catch((error) => { console.error('Error:', error); });
+      });
+  </script>
+</body>
+
+</html>
