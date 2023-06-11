@@ -28,8 +28,8 @@ This is a backend project I created as a code challenge for [Koombea](https://ko
 
 ## Mockups
 
-<img src="https://raw.githubusercontent.com/willzarem/koombea-backend-interview/main/public/img/1.png" alt="Mockup 1" width="300" height="300">
-<img src="https://raw.githubusercontent.com/willzarem/koombea-backend-interview/main/public/img/2.png" alt="Mockup 2" width="300" height="300">
+<img src="https://raw.githubusercontent.com/willzarem/koombea-backend-interview/main/public/img/1.png" alt="Mockup 1" width="400" height="300">
+<img src="https://raw.githubusercontent.com/willzarem/koombea-backend-interview/main/public/img/2.png" alt="Mockup 2" width="400" height="300">
 
 ## Technology used
 
