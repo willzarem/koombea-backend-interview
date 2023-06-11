@@ -7,11 +7,19 @@ export class ClientController {
   renderIndex() {
     return;
   }
+
+  @Get('signup')
+  @Render('signup')
+  renderSignUp() {
+    return;
+  }
+
   @Get('scrapes')
   @Render('scrapes')
   renderScrapes() {
     return;
   }
+
   @Get('scrapes/:id')
   @Render('scrape-detail')
   renderScrapeDetail(@Param('id') id: string) {

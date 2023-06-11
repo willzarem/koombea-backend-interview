@@ -82,7 +82,6 @@ export class ScrapesService {
     await this.scrapeRepository.save(scrape);
 
     await this.scrapingQueue.add('scrape_url', scrape);
-    this.logger.log(`started queue for ${scrape.id} | ${scrape.url}`);
 
     return scrape;
   }

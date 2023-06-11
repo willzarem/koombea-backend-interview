@@ -9,7 +9,10 @@
 
 <body>
   <div class='flex flex-col'>
-    <h2>Web Scraper</h2>
+    <div class="flex flex-row justify-between">
+      <a href="/client">Exit</a>
+      <h2>Web Scraper</h2>
+    </div>
 
     <div class="flex flex-row">
       <form id="scrape-form">
@@ -20,8 +23,8 @@
               <input type="text" id="url" name="url" required />
             </div>
             <div>
-              <label for="title">Title:</label>
-              <input type="text" id="title" name="title" required />
+              <label for="title">Title: (optional)</label>
+              <input type="text" id="title" name="title" />
             </div>
           </div>
           <div class="submit flex items-center justify-content">
@@ -72,12 +75,14 @@
           },
           body: JSON.stringify({
             url: url,
-            title: title,
+            title: title || undefined,
           }),
         })
           .then((response) => response.json())
           .then((data) => {
             loadScrapes(currentPage);
+            document.getElementById('url').value = '';
+            document.getElementById('title').value = '';
           })
           .catch((error) => {
             console.error('Error:', error);
@@ -116,7 +121,7 @@
               let row = tbody.insertRow();
               let nameCell = row.insertCell(0);
               let totalLinksCell = row.insertCell(1);
-              nameCell.innerHTML = `<a href="/client/scrapes/${scrape.id}">${scrape.title}</a>`;
+              nameCell.innerHTML = `<a href="/client/scrapes/${scrape.id}">${scrape.title || '(...)'}</a>`;
               if (scrape.status === "DONE") {
                 totalLinksCell.textContent = scrape.linksFound;
               } else {

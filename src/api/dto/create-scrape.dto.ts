@@ -1,7 +1,8 @@
-import { IsNotEmpty, IsUrl } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsUrl } from 'class-validator';
 
 export class CreateScrapeDto {
   @IsNotEmpty()
+  @IsOptional()
   title: string;
 
   @IsNotEmpty()

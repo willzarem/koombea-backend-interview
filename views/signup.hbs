@@ -1,0 +1,52 @@
+<html>
+
+<head>
+  <title>SignUp Page</title>
+  <script src='https://cdn.tailwindcss.com'></script>
+  <link rel='stylesheet' href='../styles.css' />
+</head>
+
+<body>
+  <div class='flex flex-col'>
+    <h2>SignUp Page</h2>
+
+    <form id='login-form'>
+      <div>
+        <label for='username'>Username:</label>
+        <input type='text' id='username' name='username' required />
+      </div>
+      <div>
+        <label for='password'>Password:</label>
+        <input type='password' id='password' name='password' required />
+      </div>
+      <button type='submit'>Register</button>
+    </form>
+
+  </div>
+
+  <script>
+    document.getElementById("login-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      let username = document.getElementById("username").value;
+      let password = document.getElementById("password").value;
+      fetch("/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: username, password: password }),
+      })
+        .then((response) => {
+          if (response.ok) {
+            window.location = "/client";
+          } else {
+            alert('Register failed');
+            console.error(response);
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    });
+  </script>
+</body>
+
+</html>
