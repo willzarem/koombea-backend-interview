@@ -90,3 +90,9 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
+
+## Test coverage
+
+**95.75%**
+
+<img src="https://raw.githubusercontent.com/willzarem/koombea-backend-interview/main/public/img/coverage.png" alt="Mockup 2" width="1080" height="300">
