@@ -25,6 +25,7 @@ This is a backend project I created as a code challenge for [Koombea](https://ko
 ## Progress
 
 - 24h Mark -> [1st release](https://github.com/willzarem/koombea-backend-interview/releases/tag/v0.1.0)
+- 60h Mark -> [2nd release](https://github.com/willzarem/koombea-backend-interview/releases/tag/v0.2.0)
 
 ## Mockups
 
