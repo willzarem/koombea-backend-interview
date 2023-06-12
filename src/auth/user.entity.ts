@@ -1,4 +1,4 @@
-import { Scrape } from 'src/api/scrapes/scrape.entity';
+import { Scrape } from '../api/scrapes/scrape.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()

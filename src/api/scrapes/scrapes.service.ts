@@ -85,6 +85,7 @@ export class ScrapesService {
 
     return scrape;
   }
+
   async createScrapeContent(
     createScrapeContentDto: CreateScrapeContentDto,
     scrapeId: string,
@@ -104,6 +105,7 @@ export class ScrapesService {
 
     return scrapeContent;
   }
+
   async updateScrapeStatus(
     id: string,
     status: ScrapeStatus,
